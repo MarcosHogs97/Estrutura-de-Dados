@@ -1,8 +1,9 @@
+import java.util.Locale;
 import java.util.Scanner;
 public class V2_em_Java {
-	public double descontIR(double salarioB) {
+	public static double descontIR(double salarioB) {
 		double ir = 0.0;
-		
+
 		if(salarioB<=1250) {
 			ir = 0.0;
 		}
@@ -14,7 +15,7 @@ public class V2_em_Java {
 		}
 		return ir;
 	}
-	public double descontINSS(double salarioB) {
+	public static double descontINSS(double salarioB) {
 		double inss = 0.0;
 			if(salarioB<1250) {
 				inss = salarioB*8.5/100;
@@ -24,21 +25,176 @@ public class V2_em_Java {
 			}
 			return inss;
 	}
-	public int dependentes(int dependentes) {
+	public static int dependentes(int dependentes) {
 		int dependent;
 		dependent = dependentes*50;
-		
+
 		return dependent;
 	}
-	public double salarioBruto(double valorSetor, double horasExtras,int dependentes) {
+	public static double salarioBruto(double valorSetor, double horasExtras,int dependentes) {
 		double salarioB;
 		salarioB = valorSetor + horasExtras + dependentes;
 		return salarioB;
 	}
-	
-	public static void main(String[] args) {
-		Scanner entrada= new Scanner(System.in);
+	public static double salarioLiquido(double salarioB, double inss,double ir) {
+		double salarioL = 0.0;
+		salarioL = salarioB - inss - ir;
+		
+		return salarioL;
+	}
+	public static double hora_Extra(double horasTrabalhadas,double horasMes, double valorSetor) {	
+		
+		double valorHoraExtra = 0.0,HoraExtra = 0.0;		
+		if(horasTrabalhadas >= horasMes){
+					HoraExtra = horasTrabalhadas - horasMes;
+					valorHoraExtra = (valorSetor / horasMes) * HoraExtra;
+					return valorHoraExtra;
+				}else{
+					return valorHoraExtra;
+				}
+	}
+	public static double quantidadeHorasExtras(double horasTrabalhadas,double horasMes){
+		double horasExtras = 0.0;
+		horasExtras = horasTrabalhadas - horasMes;
+		return horasExtras;
+}
+	public static double valor_Setor(int setor){
+		double valorSetor = 0.0;
+		
+		if(setor == 6){
+			valorSetor = 2470.40;
+			}
+		else if(setor == 5){
+			valorSetor = 2700.50;
+			}
+		else if(setor == 4){
+			valorSetor = 3400.50;
+			}
+		else if(setor == 3){
+			valorSetor = 2300.00;
+			}
+		else if(setor == 2){
+			valorSetor = 3110.90;
+			}
+		else if(setor == 1){
+			valorSetor = 2890.50;
+			}
+		return valorSetor;
+}
+	public static double salario_Hora(double salarioB,double horasMes){
+		double salarioHora = 0.0;
+		salarioHora = salarioB / horasMes;
+		return salarioHora;
+	}
+	public static String nome_setor(int setor){
+		String nomeSetor =" ";
+	if(setor == 6){
+		nomeSetor = "Operacional";
+		}
+	else if(setor == 5){
+		nomeSetor = "Logística e transporte";
+		}
+	else if(setor == 4){
+		nomeSetor = "TI";
+		}
+	else if(setor == 3){
+		nomeSetor = "Financeiro";
+		}
+	else if(setor == 2){
+		nomeSetor = "Comercial";
+		}
+	else if(setor == 1){
+		nomeSetor = "Administrativo";
+		}
+	return nomeSetor;
+} 
 
+	public static void main(String[] args) {
+		Locale.setDefault(Locale.US);
+		Scanner entrada= new Scanner(System.in);
+		//variaveis.
+		final double horaMes = 220.0;
+		int qF, n = 1;
+		//entrada para o tamanho dos Arrays
+		System.out.print("Informe a quantidade de funcionarios que ira calcular: ");
+		qF = entrada.nextInt();
+		//Arrays
+		String funcionario[] = new String[qF];
+		String nomeSetor[] = new String[qF];
+		double valorSetor[] = new double[qF];
+		double salarioB[] = new double[qF];
+		double valorHoraExtra[] = new double[qF];
+		double salarioL[] = new double[qF];
+		double descINSS[] = new double[qF];
+		double descIR[] = new double[qF];
+		double horasTrabalhadas[] = new double[qF];
+		double horasExtras[] = new double[qF];
+		double salarioHora[] = new double[qF];
+		int addDependentes[] = new int[qF];
+		int setores[] = new int[qF];
+		int dependentes[] = new int[qF];
+		
+		//Corpo
+		
+		for (int l = 0; l < qF; l++) {
+			System.out.print("Informe nome do " + n + "° funcionario: ");
+			funcionario[l] = entrada.next();
+			do {
+				System.out.println("Informe o sentor: 1-Administrativo 2-Comercial 3-Financeiro 4-TI 5-Logística e transporte 6-Operacional");
+				setores[l] = entrada.nextInt();
+			}while(setores[l] != 1 & setores[l] != 2 & setores[l] != 3 & setores[l] != 4 & setores[l] != 5 & setores[l] != 6);
+			do {
+				System.out.println("Informe a quantidade de hora trabalhada(no minimo 220)");
+				horasTrabalhadas[l] = entrada.nextDouble();
+			}while(horasTrabalhadas[l] < horaMes);
+			System.out.print("Informe a quantidade de dependentes: ");
+			dependentes[l] = entrada.nextInt();
+			n = n + 1;
+		}
+		//Chamada de Funcoes
+		for (int l = 0; l < qF; l++) {
+			valorSetor[l] = valor_Setor(setores[l]);
+			valorHoraExtra[l] = hora_Extra(horasTrabalhadas[l], horaMes, valorSetor[l]);
+			salarioB[l] = salarioBruto(valorSetor[l], valorHoraExtra[l], dependentes[l]);			
+			descINSS[l] = descontINSS(salarioB[l]);	
+			descIR[l] = descontIR(salarioB[l]);		
+			salarioL[l] = salarioLiquido(salarioB[l], descINSS[l], descIR[l]);		
+			addDependentes[l] = dependentes(dependentes[l]);
+			nomeSetor[l] = nome_setor(setores[l]);
+			horasExtras[l] = quantidadeHorasExtras(horasTrabalhadas[l], horaMes);
+			salarioHora[l] = salario_Hora(salarioB[l], horaMes);
+		
+			System.out.println("----------------------------------------------------------------");
+			System.out.println("Nome do funcionario:	" + funcionario[l]);		
+			System.out.println("Setor:	" + nomeSetor[l]);
+			System.out.printf("Salario:			R$%.2f" , valorSetor[l]);
+			System.out.println();
+			System.out.printf("Horas trabalhadas:		%.1f" + " Horas" , horasTrabalhadas[l]);
+			System.out.println();
+			System.out.printf("Salario hora			R$:%.2f" , salarioHora[l]);
+			System.out.println();
+			if(dependentes[l] >= 1) {
+				System.out.println("Dependentes:			" + dependentes[l]);
+			}
+			if(dependentes[l] >= 1) {
+				System.out.println("adicional de Dependentes:	R$" + addDependentes[l]);
+			}
+			if(horasTrabalhadas[l] > horaMes) {
+				System.out.printf("Horas extras:			%.1f" + " Horas" , horasExtras[l]);
+				System.out.println();
+			}
+			System.out.printf("Salario bruto			R$:%.2f" , salarioB[l]);
+			System.out.println();
+			System.out.printf("Desconto INSS 			R$:%.2f" , descINSS[l]);
+			System.out.println();
+			System.out.printf("Desconto IR			R$:%.2f" , descIR[l]);
+			System.out.println();
+			System.out.printf("Salario liquido			R$:%.2f" , salarioL[l]);
+			System.out.println();
+			System.out.println("----------------------------------------------------------------");
+		}
+		System.out.println("==============================Fim===============================");	
+		entrada.close();	
 	}
 
 }
