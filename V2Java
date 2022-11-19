@@ -1,0 +1,44 @@
+import java.util.Scanner;
+public class V2_em_Java {
+	public double descontIR(double salarioB) {
+		double ir = 0.0;
+		
+		if(salarioB<=1250) {
+			ir = 0.0;
+		}
+		else if(salarioB>1250 & salarioB<2000){
+			ir = salarioB*5/100;
+		}
+		else if(salarioB>2000) {
+			ir = salarioB*7/100;
+		}
+		return ir;
+	}
+	public double descontINSS(double salarioB) {
+		double inss = 0.0;
+			if(salarioB<1250) {
+				inss = salarioB*8.5/100;
+			}
+			else{
+				inss = salarioB*9/100;
+			}
+			return inss;
+	}
+	public int dependentes(int dependentes) {
+		int dependent;
+		dependent = dependentes*50;
+		
+		return dependent;
+	}
+	public double salarioBruto(double valorSetor, double horasExtras,int dependentes) {
+		double salarioB;
+		salarioB = valorSetor + horasExtras + dependentes;
+		return salarioB;
+	}
+	
+	public static void main(String[] args) {
+		Scanner entrada= new Scanner(System.in);
+
+	}
+
+}
